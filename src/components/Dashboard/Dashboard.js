@@ -14,14 +14,14 @@ import { getAuth0Id, isEqual } from "../utils/GeneralUtils";
 
 export default function Dashboard() {
     let { auth0Id } = useParams();
-    const { isAuthenticated, user } = useAuth0();
+    const { user } = useAuth0();
     const [haulsData, setHaulsData] = useState([]);
     const [numberOfHauls, setNumberOfHauls] = useState(0);
     const [totalHaulItems, setTotalHaulItems] = useState(0);
     const [listingsContributed, setListingsContributed] = useState(0);
     const [qualityChecksDone, setQualityChecksDone] = useState(0);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState("");
 
     useEffect(() => {
         updateDashboard();
@@ -60,7 +60,7 @@ export default function Dashboard() {
                     </h2>
                     {isEqual(auth0Id, getAuth0Id(user)) ? (
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={() => setIsModalOpen("add")}
                             className="flex
                             items-center
                             justify-between
@@ -146,9 +146,9 @@ export default function Dashboard() {
                                 >
                                     <th className="px-4 py-3">Item</th>
                                     <th className="px-4 py-3">Total</th>
-                                    <th className="px-4 py-3">Last Updated</th>
-
                                     <th className="px-4 py-3">Status</th>
+
+                                    <th className="px-4 py-3">Last Updated</th>
                                 </tr>
                             </thead>
                             <tbody
@@ -169,6 +169,11 @@ export default function Dashboard() {
                                                 haulListing.lastUpdated
                                             }
                                             key={i}
+                                            isMyHaul={
+                                                auth0Id === getAuth0Id(user)
+                                            }
+                                            setIsModalOpen={setIsModalOpen}
+                                            _id={haulListing._id}
                                         />
                                     );
                                 })}

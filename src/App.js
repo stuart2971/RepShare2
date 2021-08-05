@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
+import Browse from "./components/Browse/Browse";
 import CreateListing from "./components/CreateListing/CreateListing";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header";
@@ -8,7 +9,6 @@ import NavbarMobile from "./components/Navbar/NavbarMobile";
 
 function App() {
     const [sideMenu, toggleSideMenu] = useState(false);
-    console.log(sideMenu);
     return (
         <BrowserRouter>
             <div class="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -30,6 +30,7 @@ function App() {
                             path="/createListing"
                             component={CreateListing}
                         />
+                        <Route path="/browse" component={Browse} />
                     </Switch>
                 </div>
             </div>

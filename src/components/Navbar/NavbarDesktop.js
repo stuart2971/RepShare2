@@ -134,7 +134,9 @@ export default function NavbarDesktop() {
                                 >
                                     <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                 </svg>
-                                <span className="ml-4">Browse</span>
+                                <Link to={`/browse`}>
+                                    <span className="ml-4">Browse</span>
+                                </Link>
                             </a>
                         </li>
                         <li className="relative px-6 py-3">

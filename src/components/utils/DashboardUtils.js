@@ -23,7 +23,6 @@ export async function getHaulsData(auth0Id) {
 }
 
 export async function createHaul(auth0Id, haulName) {
-    console.log(auth0Id, haulName);
     try {
         let response = await fetch(
             `${serverDomain}/haul/${auth0Id}/createHaul/${haulName}`
@@ -31,6 +30,19 @@ export async function createHaul(auth0Id, haulName) {
         return response.json();
     } catch (err) {
         console.log("ERROR CREATING HAUL ", err);
+    }
+}
+
+export async function removeHaul(auth0Id, haulId) {
+    try {
+        console.log(auth0Id, " | ", haulId);
+        let response = await fetch(
+            `${serverDomain}/haul/${auth0Id}/removeHaul/${haulId}`
+        );
+
+        return response.json();
+    } catch (err) {
+        console.log("ERROR REMOVING HAUL ", err);
     }
 }
 
