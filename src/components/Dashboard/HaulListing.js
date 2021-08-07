@@ -7,7 +7,7 @@ export default function HaulListing({
     _id,
 }) {
     return (
-        <tr className="text-gray-700 dark:text-gray-400">
+        <tr className="cursor-pointer text-gray-700 dark:text-gray-400">
             <td className="px-4 py-3">
                 <div className="flex items-center text-sm">
                     {/* Avatar with inset shadow */}

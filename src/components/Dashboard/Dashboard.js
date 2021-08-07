@@ -23,9 +23,11 @@ export default function Dashboard() {
 
     const [isModalOpen, setIsModalOpen] = useState("");
 
-    useEffect(() => {
-        updateDashboard();
-    }, [auth0Id]);
+    // Commenting this out may cause issues.  If you notice any uncomment this
+    // useEffect(() => {
+    //     console.log("Rendering first");
+    //     updateDashboard();
+    // }, [auth0Id]);
     useEffect(() => {
         updateDashboard();
     }, []);
@@ -41,7 +43,7 @@ export default function Dashboard() {
     return (
         <main className="h-full overflow-y-auto">
             <Modal
-                setHaulsData={setHaulsData}
+                updateDashboard={updateDashboard}
                 isModalOpen={isModalOpen}
                 setIsModalOpen={setIsModalOpen}
             />

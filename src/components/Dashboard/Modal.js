@@ -5,7 +5,7 @@ import { createHaul, removeHaul } from "../utils/DashboardUtils";
 export default function CreateHaulModal({
     isModalOpen,
     setIsModalOpen,
-    setHaulsData,
+    updateDashboard,
 }) {
     const [haulName, setHaulName] = useState("");
     const [deleteConfirmation, setDeleteConfirmation] = useState("");
@@ -87,17 +87,17 @@ export default function CreateHaulModal({
     }
     async function confirmModal() {
         if (modalCommand === "add") {
-            const newHauls = await createHaul(user.sub, haulName);
-            if (newHauls) {
-                setHaulsData(newHauls.hauls);
+            const InsertedStatus = await createHaul(user.sub, haulName);
+            if (InsertedStatus.inserted) {
+                updateDashboard();
                 closeModal();
             }
         }
         if (modalCommand === "delete") {
             if (deleteConfirmation === "DELETE") {
-                const newHauls = await removeHaul(user.sub, modalOptions);
-                if (newHauls) {
-                    setHaulsData(newHauls.hauls);
+                const deletedStatus = await removeHaul(user.sub, modalOptions);
+                if (deletedStatus.deleted) {
+                    updateDashboard();
                     closeModal();
                 }
             }

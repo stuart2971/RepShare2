@@ -49,3 +49,32 @@ export async function createListing(
         console.log(err);
     }
 }
+
+export async function getNewListings(limit, skip) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/listing/newListings/${limit}/${skip}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}
+
+export async function getListingsData(listingIds) {
+    try {
+        let response = await fetch(`${serverDomain}/listing/getListingsData`, {
+            method: "POST",
+            mode: "cors",
+            credentials: "same-origin",
+            body: JSON.stringify({ listings: listingIds }),
+            headers: {
+                "Content-type": "application/json",
+            },
+        });
+
+        return response.json();
+    } catch (err) {
+        console.log(err);
+    }
+}
