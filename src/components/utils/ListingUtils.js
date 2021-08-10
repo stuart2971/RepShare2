@@ -61,6 +61,17 @@ export async function getNewListings(limit, skip) {
     }
 }
 
+export async function getMyListings(auth0Id) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/user/${auth0Id}/getMyListings`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}
+
 export async function getListingsData(listingIds) {
     try {
         let response = await fetch(`${serverDomain}/listing/getListingsData`, {
@@ -76,5 +87,37 @@ export async function getListingsData(listingIds) {
         return response.json();
     } catch (err) {
         console.log(err);
+    }
+}
+
+export async function getListing(listingId) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/listing/getListing/${listingId}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}
+
+export async function addListingToHaul(auth0Id, haulId, listingId) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/haul/${auth0Id}/addToHaul/${haulId}/${listingId}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}
+export async function removeListingFromHaul(auth0Id, haulId, listingId) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/haul/${auth0Id}/removeFromHaul/${haulId}/${listingId}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
     }
 }

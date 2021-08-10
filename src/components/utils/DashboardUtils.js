@@ -35,7 +35,6 @@ export async function createHaul(auth0Id, haulName) {
 
 export async function removeHaul(auth0Id, haulId) {
     try {
-        console.log(auth0Id, " | ", haulId);
         let response = await fetch(
             `${serverDomain}/haul/${auth0Id}/removeHaul/${haulId}`
         );
@@ -43,6 +42,18 @@ export async function removeHaul(auth0Id, haulId) {
         return response.json();
     } catch (err) {
         console.log("ERROR REMOVING HAUL ", err);
+    }
+}
+
+export async function getHaul(auth0Id, haulId) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/haul/${auth0Id}/getHaul/${haulId}`
+        );
+
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING HAUL ", err);
     }
 }
 

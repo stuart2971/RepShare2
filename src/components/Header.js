@@ -115,7 +115,7 @@ export default function Header({ toggleSideMenu, sideMenu }) {
                                 form-input
                             "
                             type="text"
-                            placeholder="Search for projects"
+                            placeholder="Search for items"
                             aria-label="Search"
                         />
                     </div>

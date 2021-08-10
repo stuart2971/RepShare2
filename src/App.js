@@ -4,8 +4,11 @@ import Browse from "./components/Browse/Browse";
 import CreateListing from "./components/CreateListing/CreateListing";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Header from "./components/Header";
+import MyListings from "./components/MyListings/MyListings";
 import NavbarDesktop from "./components/Navbar/NavbarDesktop";
 import NavbarMobile from "./components/Navbar/NavbarMobile";
+import HaulPage from "./components/Dashboard/HaulPage";
+import ListingPage from "./components/ListingPage/ListingPage";
 
 function App() {
     const [sideMenu, toggleSideMenu] = useState(false);
@@ -31,6 +34,18 @@ function App() {
                             component={CreateListing}
                         />
                         <Route path="/browse" component={Browse} />
+                        <Route
+                            path="/:auth0Id/myListings"
+                            component={MyListings}
+                        />
+                        <Route
+                            path="/:auth0Id/haul/:haulId"
+                            component={HaulPage}
+                        />
+                        <Route
+                            path="/listing/:listingId"
+                            component={ListingPage}
+                        />
                     </Switch>
                 </div>
             </div>

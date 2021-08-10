@@ -14,7 +14,6 @@ export default function NavbarDesktop() {
         );
         console.log(fetchedUser);
     }, [isAuthenticated]);
-    function buttonFunction() {}
     return (
         <>
             <aside
@@ -165,7 +164,9 @@ export default function NavbarDesktop() {
                                 >
                                     <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                 </svg>
-                                <span className="ml-4">My Listings</span>
+                                <Link to={`/${getAuth0Id(user)}/myListings`}>
+                                    <span className="ml-4">My Listings</span>
+                                </Link>
                             </a>
                         </li>
                     </ul>

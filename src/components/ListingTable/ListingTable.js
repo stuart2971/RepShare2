@@ -3,13 +3,12 @@ import { useEffect } from "react";
 import { getListingsData } from "../utils/ListingUtils";
 import Listing from "./Listing";
 
-export default function ListingTable({ listings }) {
+export default function ListingTable({ listings, removeFromHaul = null }) {
     const [listingsData, setListingsData] = useState([]);
 
     useEffect(async () => {
         const data = await getListingsData(listings);
         setListingsData(data);
-        console.log(data);
     }, [listings]);
 
     return (
@@ -46,6 +45,8 @@ export default function ListingTable({ listings }) {
                         {listingsData.map((listing) => {
                             return (
                                 <Listing
+                                    _id={listing._id}
+                                    imageUrl={listing.imageURL[0]}
                                     name={listing.name}
                                     price={listing.price}
                                     tag={listing.tag}
@@ -53,6 +54,8 @@ export default function ListingTable({ listings }) {
                                         listing.qualityChecks !== 0
                                     }
                                     dateCreated={listing.dateCreated}
+                                    createdBy={listing.createdBy}
+                                    removeFromHaul={removeFromHaul}
                                 />
                             );
                         })}

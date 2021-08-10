@@ -1,3 +1,7 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import { useHistory } from "react-router-dom";
+import { getAuth0Id } from "../utils/GeneralUtils";
+
 export default function Listing({
     name,
     price,
@@ -5,9 +9,17 @@ export default function Listing({
     tag,
     isQualityChecked,
     dateCreated,
+    _id,
+    createdBy,
+    removeFromHaul,
 }) {
+    const { user } = useAuth0();
+    const history = useHistory();
+    function redirectToItemPage() {
+        history.push(`/listing/${_id}`);
+    }
     return (
-        <tr className="cursor-pointer text-gray-700 dark:text-gray-400">
+        <tr className=" text-gray-700 dark:text-gray-400">
             <td className="px-4 py-3">
                 <div className="flex items-center text-sm">
                     <div
@@ -21,19 +33,29 @@ export default function Listing({
                               md:block
                             "
                     >
-                        <img
-                            className="object-cover w-full h-full rounded-full"
-                            src="https://images.unsplash.com/photo-1566411520896-01e7ca4726af?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                            alt=""
-                            loading="lazy"
-                        />
+                        {imageUrl ? (
+                            <img
+                                className="object-cover w-full h-full rounded-full"
+                                src={imageUrl}
+                                alt=""
+                                loading="lazy"
+                            />
+                        ) : (
+                            <></>
+                        )}
+
                         <div
                             className="absolute inset-0 rounded-full shadow-inner"
                             aria-hidden="true"
                         ></div>
                     </div>
                     <div>
-                        <p className="font-semibold">{name}</p>
+                        <p
+                            onClick={redirectToItemPage}
+                            className="cursor-pointer font-semibold"
+                        >
+                            {name}
+                        </p>
                         <p className="text-xs text-gray-400 dark:text-gray-400">
                             {tag}
                         </p>
@@ -60,6 +82,16 @@ export default function Listing({
             <td className="px-4 py-3 text-sm">
                 {dateCreated.substring(0, 10)}
             </td>
+            {removeFromHaul ? (
+                <td
+                    className="cursor-pointer px-4 py-3 text-sm"
+                    onClick={() => removeFromHaul(_id)}
+                >
+                    ✕
+                </td>
+            ) : (
+                <></>
+            )}
         </tr>
     );
 }

@@ -1,3 +1,6 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import { Link, useHistory } from "react-router-dom";
+
 export default function HaulListing({
     name,
     listingSize,
@@ -6,14 +9,24 @@ export default function HaulListing({
     setIsModalOpen,
     _id,
 }) {
+    const { user } = useAuth0();
+    const history = useHistory();
+    function redirectToHaulPage() {
+        history.push(`/${user.sub}/haul/${_id}`);
+    }
     return (
-        <tr className="cursor-pointer text-gray-700 dark:text-gray-400">
+        <tr className="text-gray-700 dark:text-gray-400">
             <td className="px-4 py-3">
                 <div className="flex items-center text-sm">
                     {/* Avatar with inset shadow */}
 
                     <div>
-                        <p className="font-semibold">{name}</p>
+                        <p
+                            onClick={redirectToHaulPage}
+                            className="cursor-pointer font-semibold"
+                        >
+                            {name}
+                        </p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">
                             {listingSize} items
                         </p>
