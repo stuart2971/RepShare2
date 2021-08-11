@@ -6,6 +6,7 @@ import Card from "./Card";
 import ListingTable from "../ListingTable/ListingTable";
 import { removeListingFromHaul } from "../utils/ListingUtils";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function HaulPage() {
     const { user } = useAuth0();
@@ -23,7 +24,7 @@ export default function HaulPage() {
 
     async function removeFromHaul(listingId) {
         const updatedUser = await removeListingFromHaul(
-            user.sub,
+            getAuth0Id(user),
             haulId,
             listingId
         );
@@ -68,7 +69,7 @@ export default function HaulPage() {
                 </div>
                 <ListingTable
                     removeFromHaul={
-                        user.sub === auth0Id ? removeFromHaul : null
+                        getAuth0Id(user) === auth0Id ? removeFromHaul : null
                     }
                     listings={haulListings}
                 />

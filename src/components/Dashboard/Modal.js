@@ -1,6 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { createHaul, removeHaul } from "../utils/DashboardUtils";
+import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function CreateHaulModal({
     isModalOpen,
@@ -87,7 +88,7 @@ export default function CreateHaulModal({
     }
     async function confirmModal() {
         if (modalCommand === "add") {
-            const InsertedStatus = await createHaul(user.sub, haulName);
+            const InsertedStatus = await createHaul(getAuth0Id(user), haulName);
             if (InsertedStatus.inserted) {
                 updateDashboard();
                 closeModal();
@@ -95,7 +96,10 @@ export default function CreateHaulModal({
         }
         if (modalCommand === "delete") {
             if (deleteConfirmation === "DELETE") {
-                const deletedStatus = await removeHaul(user.sub, modalOptions);
+                const deletedStatus = await removeHaul(
+                    getAuth0Id(user),
+                    modalOptions
+                );
                 if (deletedStatus.deleted) {
                     updateDashboard();
                     closeModal();

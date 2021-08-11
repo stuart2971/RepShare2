@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -5,9 +6,14 @@ import ListingTable from "../ListingTable/ListingTable";
 import { getMyListings } from "../utils/ListingUtils";
 
 export default function MyListings() {
+    const { loginWithRedirect, isAuthenticated } = useAuth0();
     const { auth0Id } = useParams();
     const [myListings, setMyListings] = useState([]);
     useEffect(async () => {
+        if (!isAuthenticated) {
+            loginWithRedirect();
+            return;
+        }
         const myListings = await getMyListings(auth0Id);
         setMyListings(myListings.listingsContributed);
     }, []);

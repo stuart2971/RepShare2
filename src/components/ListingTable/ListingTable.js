@@ -32,7 +32,7 @@ export default function ListingTable({ listings, removeFromHaul = null }) {
                             <th className="px-4 py-3">Name</th>
                             <th className="px-4 py-3">Price</th>
                             <th className="px-4 py-3">Verified</th>
-                            <th className="px-4 py-3">Last Updated</th>
+                            <th className="px-4 py-3">Date Posted</th>
                         </tr>
                     </thead>
                     <tbody

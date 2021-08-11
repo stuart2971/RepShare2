@@ -10,11 +10,11 @@ import {
 import Card from "./Card";
 import HaulListing from "./HaulListing";
 import Modal from "./Modal";
-import { getAuth0Id, isEqual } from "../utils/GeneralUtils";
+import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function Dashboard() {
     let { auth0Id } = useParams();
-    const { user } = useAuth0();
+    const { user, isAuthenticated, loginWithRedirect } = useAuth0();
     const [haulsData, setHaulsData] = useState([]);
     const [numberOfHauls, setNumberOfHauls] = useState(0);
     const [totalHaulItems, setTotalHaulItems] = useState(0);
@@ -29,6 +29,10 @@ export default function Dashboard() {
     //     updateDashboard();
     // }, [auth0Id]);
     useEffect(() => {
+        if (!isAuthenticated) {
+            loginWithRedirect();
+            return;
+        }
         updateDashboard();
     }, []);
     async function updateDashboard() {
@@ -60,7 +64,7 @@ export default function Dashboard() {
                     >
                         Dashboard
                     </h2>
-                    {isEqual(auth0Id, getAuth0Id(user)) ? (
+                    {auth0Id === getAuth0Id(user) ? (
                         <button
                             onClick={() => setIsModalOpen("add")}
                             className="flex

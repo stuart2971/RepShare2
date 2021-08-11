@@ -3,15 +3,13 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getAuth0Id } from "../utils/GeneralUtils";
 import { getUser } from "../utils/UserUtils";
+
 export default function NavbarDesktop() {
     const { loginWithRedirect, isAuthenticated, user } = useAuth0();
 
     useEffect(async () => {
         if (!isAuthenticated) return;
-        const fetchedUser = await getUser(
-            window.location.pathname.split("/")[1],
-            user.name
-        );
+        const fetchedUser = await getUser(getAuth0Id(user), user.name);
         console.log(fetchedUser);
     }, [isAuthenticated]);
     return (
@@ -93,16 +91,18 @@ export default function NavbarDesktop() {
                                     "
                             >
                                 <svg
-                                    className="w-5 h-5"
-                                    aria-hidden="true"
-                                    fill="none"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    fill="currentColor"
+                                    class="bi bi-patch-check"
+                                    viewBox="0 0 16 16"
                                 >
-                                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                                    <path
+                                        fill-rule="evenodd"
+                                        d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0z"
+                                    />
+                                    <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z" />
                                 </svg>
                                 <span className="ml-4">Verified</span>
                             </a>
@@ -141,28 +141,26 @@ export default function NavbarDesktop() {
                         <li className="relative px-6 py-3">
                             <a
                                 className="
-                  inline-flex
-                  items-center
-                  w-full
-                  text-sm
-                  font-semibold
-                  transition-colors
-                  duration-150
-                  hover:text-gray-800
-                  dark:hover:text-gray-200
-                "
+                                inline-flex
+                                items-center
+                                w-full
+                                text-sm
+                                font-semibold
+                                transition-colors
+                                duration-150
+                                hover:text-gray-800
+                                dark:hover:text-gray-200
+                                "
                             >
                                 <svg
-                                    className="w-5 h-5"
-                                    aria-hidden="true"
-                                    fill="none"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    fill="currentColor"
+                                    class="bi bi-person"
+                                    viewBox="0 0 16 16"
                                 >
-                                    <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z" />
                                 </svg>
                                 <Link to={`/${getAuth0Id(user)}/myListings`}>
                                     <span className="ml-4">My Listings</span>

@@ -18,6 +18,7 @@ export default function Listing({
     function redirectToItemPage() {
         history.push(`/listing/${_id}`);
     }
+    console.log(name.length);
     return (
         <tr className=" text-gray-700 dark:text-gray-400">
             <td className="px-4 py-3">
@@ -50,12 +51,29 @@ export default function Listing({
                         ></div>
                     </div>
                     <div>
-                        <p
-                            onClick={redirectToItemPage}
-                            className="cursor-pointer font-semibold"
-                        >
-                            {name}
-                        </p>
+                        <div className="flex">
+                            <p
+                                onClick={redirectToItemPage}
+                                className="mr-2 cursor-pointer font-semibold"
+                            >
+                                {name.length > 20
+                                    ? name.substring(0, 20) + "..."
+                                    : name}
+                            </p>
+                            {getAuth0Id(user) === createdBy ? (
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                                </svg>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                         <p className="text-xs text-gray-400 dark:text-gray-400">
                             {tag}
                         </p>

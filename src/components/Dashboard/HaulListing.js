@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Link, useHistory } from "react-router-dom";
+import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function HaulListing({
     name,
@@ -12,7 +13,7 @@ export default function HaulListing({
     const { user } = useAuth0();
     const history = useHistory();
     function redirectToHaulPage() {
-        history.push(`/${user.sub}/haul/${_id}`);
+        history.push(`/${getAuth0Id(user)}/haul/${_id}`);
     }
     return (
         <tr className="text-gray-700 dark:text-gray-400">

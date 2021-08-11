@@ -1,11 +1,13 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useEffect } from "react/cjs/react.production.min";
+import { getAuth0Id } from "../utils/GeneralUtils";
 import { createListing, doesExist } from "../utils/ListingUtils";
 import TagsJSON from "./Tags.json";
 
 export default function CreateListing() {
-    const { user } = useAuth0();
+    const { user, isAuthenticated, loginWithRedirect } = useAuth0();
     const history = useHistory();
 
     const [link, setLink] = useState("");
@@ -20,18 +22,24 @@ export default function CreateListing() {
     async function checkIfExists(l) {
         setLink(l);
         const result = await doesExist(l);
+        console.log(result);
         if (result.exists) {
-            setLinkExists(true);
+            setLinkExists(result);
         } else {
-            setLinkExists(false);
+            setLinkExists(result);
         }
     }
     async function insertListing() {
-        if (linkExists) return;
+        if (!link) return;
+        if (!isAuthenticated) {
+            loginWithRedirect();
+            return;
+        }
+        if (linkExists.exists) return;
         setInserting(true);
         const newListing = await createListing(
             link,
-            user.sub,
+            getAuth0Id(user),
             itemName,
             imgurLink,
             message,
@@ -41,7 +49,7 @@ export default function CreateListing() {
         setInserting(false);
         console.log(newListing);
     }
-    const buttonIsDisabled = linkExists || inserting;
+    const buttonIsDisabled = linkExists.exists || inserting;
     return (
         <main className="h-full pb-16 overflow-y-auto">
             <div className="container px-6 mx-auto grid">
@@ -74,7 +82,7 @@ export default function CreateListing() {
                         </span>
                         <div
                             className={`relative text-gray-500 text-${
-                                linkExists ? "red" : "purple"
+                                linkExists.exists ? "red" : "purple"
                             }-600`}
                         >
                             <input
@@ -116,8 +124,15 @@ export default function CreateListing() {
                             </button>
                         </div>
                         {link ? (
-                            linkExists ? (
-                                <span className="text-xs text-red-600 dark:text-red-400">
+                            linkExists.exists ? (
+                                <span
+                                    onClick={() =>
+                                        history.push(
+                                            "/listing/" + linkExists._id
+                                        )
+                                    }
+                                    className="cursor-pointer underline text-xs text-red-600 dark:text-red-400"
+                                >
                                     Item with this link already exists. Click
                                     here to see the item.
                                 </span>
