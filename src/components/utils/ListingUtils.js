@@ -22,7 +22,7 @@ export async function createListing(
     link,
     auth0Id,
     name = "",
-    imageURL = "",
+    imageAddresses = [],
     message = "",
     tag = ""
 ) {
@@ -34,7 +34,7 @@ export async function createListing(
             body: JSON.stringify({
                 link,
                 name,
-                imageURL,
+                imageAddresses,
                 tag,
                 auth0Id,
                 message,

@@ -18,7 +18,6 @@ export default function Listing({
     function redirectToItemPage() {
         history.push(`/listing/${_id}`);
     }
-    console.log(name.length);
     return (
         <tr className=" text-gray-700 dark:text-gray-400">
             <td className="px-4 py-3">

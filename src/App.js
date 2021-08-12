@@ -12,6 +12,7 @@ import ListingPage from "./components/ListingPage/ListingPage";
 
 function App() {
     const [sideMenu, toggleSideMenu] = useState(false);
+
     return (
         <BrowserRouter>
             <div class="flex h-screen bg-gray-50 dark:bg-gray-900">

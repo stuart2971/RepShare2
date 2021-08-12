@@ -18,13 +18,14 @@ export default function ItemPage() {
     const { user } = useAuth0();
 
     const [name, setName] = useState("");
-    const [image, setImage] = useState("");
+    const [images, setImages] = useState("");
     const [price, setPrice] = useState("");
     const [tag, setTag] = useState("");
     const [message, setMessage] = useState("");
     const [link, setLink] = useState("");
 
     const [hauls, setHauls] = useState([]);
+    const [imageIndex, setImageIndex] = useState(0);
 
     const menuButton = (
         <MenuButton>
@@ -63,8 +64,9 @@ export default function ItemPage() {
 
     useEffect(async () => {
         const listing = await getListing(listingId);
+        console.log(listing);
         setName(listing.name);
-        setImage(listing.imageURL[0]);
+        setImages(listing.imageURL);
         setPrice(listing.price);
         setTag(listing.tag);
         setMessage(listing.message);
@@ -72,15 +74,18 @@ export default function ItemPage() {
         const haulsData = await getHaulsData(getAuth0Id(user));
         setHauls(haulsData);
     }, []);
+
     return (
         <section className="bg-gray-100 h-full md:px-10 pt-20 lg:py-28">
             <div className="container mx-auto px-5">
                 <div className="grid lg:grid-cols-2 gap-10 text-center lg:text-left">
                     <div className="space-y-8">
                         <div className="space-y-4">
-                            <h2 className="text-3xl sm:text-5xl font-bold">
-                                {name}
-                            </h2>
+                            <a href={link} target="_blank">
+                                <h2 className="underline text-3xl sm:text-5xl font-bold">
+                                    {name}
+                                </h2>
+                            </a>
                             <p className="ml-4 text-xl text-gray-600">{tag}</p>
                         </div>
                         <div className="space-y-4 flex items-center">
@@ -114,14 +119,20 @@ export default function ItemPage() {
                     <div className="relative">
                         <img
                             className="w-full"
-                            src={image}
+                            src={images[imageIndex % images.length]}
                             alt="No Listing Image"
                         />
                         <div className="absolute w-full flex justify-between top-1/2 px-2">
-                            <div className=" bg-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100">
+                            <div
+                                onClick={() => setImageIndex(imageIndex - 1)}
+                                className=" bg-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100"
+                            >
                                 ❮
                             </div>
-                            <div className=" bg-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100">
+                            <div
+                                onClick={() => setImageIndex(imageIndex + 1)}
+                                className=" bg-white w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-gray-100"
+                            >
                                 ❯
                             </div>
                         </div>

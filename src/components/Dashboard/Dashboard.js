@@ -28,6 +28,7 @@ export default function Dashboard() {
     //     console.log("Rendering first");
     //     updateDashboard();
     // }, [auth0Id]);
+
     useEffect(() => {
         if (!isAuthenticated) {
             loginWithRedirect();
