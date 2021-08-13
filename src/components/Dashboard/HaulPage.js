@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getHaul } from "../utils/DashboardUtils";
 import Card from "./Card";
-import ListingTable from "../ListingTable/ListingTable";
 import { removeListingFromHaul } from "../utils/ListingUtils";
 import { useAuth0 } from "@auth0/auth0-react";
 import { getAuth0Id } from "../utils/GeneralUtils";
+import ListingSection from "../ListingTable/ListingSection";
 
 export default function HaulPage() {
     const { user } = useAuth0();
@@ -67,8 +67,8 @@ export default function HaulPage() {
                         color="green"
                     />
                 </div>
-                <ListingTable
-                    removeFromHaul={
+                <ListingSection
+                    getIdOnClick={
                         getAuth0Id(user) === auth0Id ? removeFromHaul : null
                     }
                     listings={haulListings}

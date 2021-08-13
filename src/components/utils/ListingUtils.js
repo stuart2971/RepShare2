@@ -121,3 +121,13 @@ export async function removeListingFromHaul(auth0Id, haulId, listingId) {
         console.log("ERROR GETTING USER ", err);
     }
 }
+export async function deleteListing(listingId) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/listing/deleteListing/${listingId}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}

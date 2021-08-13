@@ -3,7 +3,7 @@ import { useState } from "react";
 import { createHaul, removeHaul } from "../utils/DashboardUtils";
 import { getAuth0Id } from "../utils/GeneralUtils";
 
-export default function CreateHaulModal({
+export default function Modal({
     isModalOpen,
     setIsModalOpen,
     updateDashboard,
@@ -75,10 +75,12 @@ export default function CreateHaulModal({
         if (modalCommand === "delete") {
             return (
                 <button
-                    disabled={deleteConfirmation === ""}
+                    disabled={deleteConfirmation !== "DELETE"}
                     onClick={confirmModal}
                     class={`w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-${
-                        deleteConfirmation ? "600 hover:bg-red-700" : "200"
+                        deleteConfirmation === "DELETE"
+                            ? "600 hover:bg-red-700"
+                            : "200"
                     } border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 focus:outline-none focus:shadow-outline-purple`}
                 >
                     Delete

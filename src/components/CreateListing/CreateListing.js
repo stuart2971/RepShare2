@@ -178,7 +178,10 @@ export default function CreateListing() {
                     </label>
                     <div
                         className={
-                            itemName || imageAddress || message || tag
+                            itemName ||
+                            imageAddress.length > 0 ||
+                            message ||
+                            tag
                                 ? ""
                                 : "opacity-25 hover:opacity-100 transition"
                         }

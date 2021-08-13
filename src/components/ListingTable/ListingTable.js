@@ -1,16 +1,6 @@
-import { useState } from "react";
-import { useEffect } from "react";
-import { getListingsData } from "../utils/ListingUtils";
 import Listing from "./Listing";
 
-export default function ListingTable({ listings, removeFromHaul = null }) {
-    const [listingsData, setListingsData] = useState([]);
-
-    useEffect(async () => {
-        const data = await getListingsData(listings);
-        setListingsData(data);
-    }, [listings]);
-
+export default function ListingTable({ listingsData, getIdOnClick }) {
     return (
         <div className="w-full overflow-hidden rounded-lg shadow-xs">
             <div className="w-full overflow-x-auto">
@@ -55,7 +45,7 @@ export default function ListingTable({ listings, removeFromHaul = null }) {
                                     }
                                     dateCreated={listing.dateCreated}
                                     createdBy={listing.createdBy}
-                                    removeFromHaul={removeFromHaul}
+                                    getIdOnClick={getIdOnClick}
                                 />
                             );
                         })}

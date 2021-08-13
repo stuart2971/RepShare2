@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import ListingTable from "../ListingTable/ListingTable";
+import ListingSection from "../ListingTable/ListingSection";
 import { getNewListings } from "../utils/ListingUtils";
 
 export default function Browse() {
@@ -26,7 +26,7 @@ export default function Browse() {
                         Newest Listings
                     </h2>
                 </div>
-                <ListingTable listings={browseListings} />
+                <ListingSection listings={browseListings} />
             </div>
         </main>
     );
