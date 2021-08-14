@@ -131,3 +131,23 @@ export async function deleteListing(listingId) {
         console.log("ERROR GETTING USER ", err);
     }
 }
+export async function editListing(listingId, newListing) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/listing/editListing/${listingId}`,
+            {
+                method: "POST",
+                mode: "cors",
+                credentials: "same-origin",
+                body: JSON.stringify(newListing),
+                headers: {
+                    "Content-type": "application/json",
+                },
+            }
+        );
+
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}

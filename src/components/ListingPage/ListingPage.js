@@ -8,17 +8,23 @@ import {
 } from "@szhsin/react-menu";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getHaulsData } from "../utils/DashboardUtils";
 import { addListingToHaul, getListing } from "../utils/ListingUtils";
 import { getAuth0Id } from "../utils/GeneralUtils";
+import EditListingModal from "./EditListingModal";
 
 export default function ItemPage() {
+    const history = useHistory();
+
+    function redirectToItemPage(_id) {
+        history.push(`/listing/${_id}`);
+    }
     const { listingId } = useParams();
     const { user } = useAuth0();
 
     const [name, setName] = useState("");
-    const [images, setImages] = useState("");
+    const [images, setImages] = useState([]);
     const [price, setPrice] = useState("");
     const [tag, setTag] = useState("");
     const [message, setMessage] = useState("");
@@ -28,6 +34,7 @@ export default function ItemPage() {
 
     const [hauls, setHauls] = useState([]);
     const [imageIndex, setImageIndex] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const menuButton = (
         <MenuButton>
@@ -62,8 +69,13 @@ export default function ItemPage() {
     }
 
     useEffect(async () => {
+        updateListing();
+        const haulsData = await getHaulsData(getAuth0Id(user));
+        setHauls(haulsData);
+    }, []);
+
+    async function updateListing() {
         const listing = await getListing(listingId);
-        console.log(listing);
         setName(listing.name);
         setImages(listing.imageURL);
         setPrice(listing.price);
@@ -72,20 +84,42 @@ export default function ItemPage() {
         setLink(listing.link);
         setQualityChecks(listing.qualityChecks);
         setCreatedBy(listing.createdBy);
-        const haulsData = await getHaulsData(getAuth0Id(user));
-        setHauls(haulsData);
-    }, []);
+    }
 
     return (
         <section className="text-gray-600 body-font">
+            <EditListingModal
+                isModalOpen={isModalOpen}
+                setIsModalOpen={setIsModalOpen}
+                name={name}
+                price={price}
+                tag={tag}
+                message={message}
+                images={images}
+                updateListing={updateListing}
+                listingId={listingId}
+            />
             <div className="container px-5 py-24 mx-auto">
-                <div className="lg:w-4/5 mx-auto flex flex-wrap">
+                <div className="lg:w-4/5 mx-auto flex flex-wrap relative">
                     <img
                         alt="ecommerce"
                         className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded"
-                        src={images[0]}
+                        src={images[imageIndex % images.length]}
                     />
-
+                    <div className="absolute top-2 left-2 flex">
+                        <div
+                            onClick={() => setImageIndex(imageIndex - 1)}
+                            className="hover:bg-gray-200 cursor-pointer flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full"
+                        >
+                            ❮
+                        </div>
+                        <div
+                            onClick={() => setImageIndex(imageIndex + 1)}
+                            className="mx-2 hover:bg-gray-200 cursor-pointer flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full"
+                        >
+                            ❯
+                        </div>
+                    </div>
                     <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                         <h2 className="text-sm title-font text-gray-500 tracking-widest">
                             {tag}
@@ -223,7 +257,10 @@ export default function ItemPage() {
                                     })}
                                 </Menu>
                                 {createdBy === getAuth0Id(user) ? (
-                                    <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                                    <button
+                                        onClick={() => setIsModalOpen(true)}
+                                        className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
+                                    >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
