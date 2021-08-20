@@ -111,6 +111,7 @@ export async function addListingToHaul(auth0Id, haulId, listingId) {
         console.log("ERROR GETTING USER ", err);
     }
 }
+
 export async function removeListingFromHaul(auth0Id, haulId, listingId) {
     try {
         let response = await fetch(
@@ -121,6 +122,7 @@ export async function removeListingFromHaul(auth0Id, haulId, listingId) {
         console.log("ERROR GETTING USER ", err);
     }
 }
+
 export async function deleteListing(listingId) {
     try {
         let response = await fetch(
@@ -131,6 +133,7 @@ export async function deleteListing(listingId) {
         console.log("ERROR GETTING USER ", err);
     }
 }
+
 export async function editListing(listingId, newListing) {
     try {
         let response = await fetch(
@@ -140,6 +143,33 @@ export async function editListing(listingId, newListing) {
                 mode: "cors",
                 credentials: "same-origin",
                 body: JSON.stringify(newListing),
+                headers: {
+                    "Content-type": "application/json",
+                },
+            }
+        );
+
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING USER ", err);
+    }
+}
+
+export async function addQualityCheck(
+    listingId,
+    name,
+    auth0Id,
+    comment,
+    rating
+) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/listing/createQualityCheck/${listingId}`,
+            {
+                method: "POST",
+                mode: "cors",
+                credentials: "same-origin",
+                body: JSON.stringify({ name, auth0Id, comment, rating }),
                 headers: {
                     "Content-type": "application/json",
                 },

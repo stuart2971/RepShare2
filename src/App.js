@@ -15,7 +15,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div class="flex h-screen bg-gray-50 dark:bg-gray-900">
+            <div class="flex bg-gray-50 dark:bg-gray-900">
                 <NavbarDesktop />
                 {sideMenu ? <NavbarMobile /> : <></>}
 

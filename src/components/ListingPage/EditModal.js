@@ -3,8 +3,8 @@ import TagsJSON from "../CreateListing/Tags.json";
 import { editListing } from "../utils/ListingUtils";
 
 export default function EditListingModal({
-    setIsModalOpen,
-    isModalOpen,
+    setIsEditModalOpen,
+    isEditModalOpen,
     name,
     price,
     tag,
@@ -38,8 +38,8 @@ export default function EditListingModal({
                         setEditedImages(addresses);
                     }}
                     value={editedImages[i]}
-                    class="my-4 focus:border-purple-400 block w-full mt-1 text-lg dark:border-gray-600 dark:bg-gray-700  focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder={`${i + 1}: Item Name`}
+                    className="my-4 focus:border-purple-400 block w-full mt-1 text-lg dark:border-gray-600 dark:bg-gray-700  focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    placeholder={`Image ${i + 1}`}
                 />
             );
         }
@@ -48,26 +48,27 @@ export default function EditListingModal({
     async function requestEditListing() {
         const newListing = {
             name: editedName,
-            imageURL: editedImages,
+            imageURL: editedImages.filter((e) => e),
             price: editedPrice,
             message: editedMessage,
             tag: editedTag,
         };
         const result = await editListing(listingId, newListing);
+        console.log(result);
         if (result.edited) {
             updateListing();
-            setIsModalOpen(false);
+            setIsEditModalOpen(false);
         }
     }
-    if (!isModalOpen) return <></>;
+    if (!isEditModalOpen) return <></>;
     return (
         <div>
             <div
-                x-show="isModalOpen"
+                x-show="isEditModalOpen"
                 class="fixed inset-0 z-30 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
             >
                 <div
-                    x-show="isModalOpen"
+                    x-show="isEditModalOpen"
                     class="w-full px-6 py-4 overflow-hidden bg-white rounded-t-lg dark:bg-gray-800 sm:rounded-lg sm:m-4 sm:max-w-xl"
                     role="dialog"
                     id="modal"
@@ -76,7 +77,7 @@ export default function EditListingModal({
                         <button
                             class="inline-flex items-center justify-center w-6 h-6 text-gray-400 transition-colors duration-150 rounded dark:hover:text-gray-200 hover: hover:text-gray-700"
                             aria-label="close"
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => setIsEditModalOpen(false)}
                         >
                             <svg
                                 class="w-4 h-4"
@@ -183,7 +184,7 @@ export default function EditListingModal({
                     </div>
                     <footer class="flex flex-col items-center justify-end px-6 py-3 -mx-6 -mb-4 space-y-4 sm:space-y-0 sm:space-x-6 sm:flex-row bg-gray-50 dark:bg-gray-800">
                         <button
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => setIsEditModalOpen(false)}
                             class="w-full px-5 py-3 text-sm font-medium leading-5 text-white text-gray-700 transition-colors duration-150 border border-gray-300 rounded-lg dark:text-gray-400 sm:px-4 sm:py-2 sm:w-auto active:bg-transparent hover:border-gray-500 focus:border-gray-500 active:text-gray-500 focus:outline-none focus:shadow-outline-gray"
                         >
                             Cancel

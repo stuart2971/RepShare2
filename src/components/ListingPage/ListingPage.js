@@ -8,18 +8,16 @@ import {
 } from "@szhsin/react-menu";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getHaulsData } from "../utils/DashboardUtils";
 import { addListingToHaul, getListing } from "../utils/ListingUtils";
 import { getAuth0Id } from "../utils/GeneralUtils";
-import EditListingModal from "./EditListingModal";
+import EditModal from "./EditModal";
+import QualityChecksSection from "./QualityCheck/QualityChecksSection";
+import Stars from "./Stars";
+import DeleteModal from "./DeleteModal";
 
 export default function ItemPage() {
-    const history = useHistory();
-
-    function redirectToItemPage(_id) {
-        history.push(`/listing/${_id}`);
-    }
     const { listingId } = useParams();
     const { user } = useAuth0();
 
@@ -34,7 +32,8 @@ export default function ItemPage() {
 
     const [hauls, setHauls] = useState([]);
     const [imageIndex, setImageIndex] = useState(0);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const menuButton = (
         <MenuButton>
@@ -56,7 +55,7 @@ export default function ItemPage() {
                         d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"
                     />
                 </svg>
-                Add to haul
+                <span className="hidden sm:block">Add to haul</span>
             </button>
         </MenuButton>
     );
@@ -76,6 +75,7 @@ export default function ItemPage() {
 
     async function updateListing() {
         const listing = await getListing(listingId);
+        console.log(listing);
         setName(listing.name);
         setImages(listing.imageURL);
         setPrice(listing.price);
@@ -87,10 +87,10 @@ export default function ItemPage() {
     }
 
     return (
-        <section className="text-gray-600 body-font">
-            <EditListingModal
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
+        <section className="text-gray-600 body-font h-100 pb-24">
+            <EditModal
+                isEditModalOpen={isEditModalOpen}
+                setIsEditModalOpen={setIsEditModalOpen}
                 name={name}
                 price={price}
                 tag={tag}
@@ -99,7 +99,12 @@ export default function ItemPage() {
                 updateListing={updateListing}
                 listingId={listingId}
             />
-            <div className="container px-5 py-24 mx-auto">
+            <DeleteModal
+                isDeleteModalOpen={isDeleteModalOpen}
+                setIsDeleteModalOpen={setIsDeleteModalOpen}
+                listingId={listingId}
+            />
+            <div className="container px-5 pt-24 mx-auto">
                 <div className="lg:w-4/5 mx-auto flex flex-wrap relative">
                     <img
                         alt="ecommerce"
@@ -131,61 +136,7 @@ export default function ItemPage() {
                         </a>
                         <div className="flex mb-4">
                             <span className="flex items-center">
-                                <svg
-                                    fill="currentColor"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    className="w-4 h-4 text-purple-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                <svg
-                                    fill="currentColor"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    className="w-4 h-4 text-purple-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                <svg
-                                    fill="currentColor"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    className="w-4 h-4 text-purple-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                <svg
-                                    fill="currentColor"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    className="w-4 h-4 text-purple-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
-                                <svg
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    className="w-4 h-4 text-purple-500"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                                </svg>
+                                <Stars count={4} size={4} />
                                 <span className="text-gray-600 ml-3">
                                     {qualityChecks.length} Reviews
                                 </span>
@@ -257,25 +208,49 @@ export default function ItemPage() {
                                     })}
                                 </Menu>
                                 {createdBy === getAuth0Id(user) ? (
-                                    <button
-                                        onClick={() => setIsModalOpen(true)}
-                                        className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            className="bi bi-pencil-fill w-4 h-4"
-                                            viewBox="0 0 16 16"
+                                    <div>
+                                        <button
+                                            onClick={() =>
+                                                setIsEditModalOpen(true)
+                                            }
+                                            className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
                                         >
-                                            <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                                        </svg>
-                                    </button>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor"
+                                                className="bi bi-pencil-fill w-4 h-4"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                setIsDeleteModalOpen(true)
+                                            }
+                                            className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor"
+                                                className="bi bi-trash-fill w-4 h-4"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
                                 ) : (
                                     <></>
                                 )}
                             </div>
                         </div>
                     </div>
+                    <QualityChecksSection
+                        listingId={listingId}
+                        qualityChecks={qualityChecks}
+                        updateListing={updateListing}
+                    />
                 </div>
             </div>
         </section>

@@ -66,7 +66,7 @@ export default function CreateListing() {
     console.log(imageAddress);
     const buttonIsDisabled = linkExists.exists || inserting;
     return (
-        <main className="h-full pb-16 overflow-y-auto">
+        <main className="h-screen pb-16 overflow-y-auto">
             <div className="container px-6 mx-auto grid">
                 <h2
                     className="

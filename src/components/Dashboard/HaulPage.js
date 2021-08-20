@@ -32,7 +32,7 @@ export default function HaulPage() {
     }
 
     return (
-        <main className="h-full overflow-y-auto">
+        <main className="h-screen overflow-y-auto">
             <div className="container px-6 mx-auto grid">
                 <div className="flex items-center justify-between">
                     <h2

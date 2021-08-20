@@ -23,12 +23,6 @@ export default function Dashboard() {
 
     const [isModalOpen, setIsModalOpen] = useState("");
 
-    // Commenting this out may cause issues.  If you notice any uncomment this
-    // useEffect(() => {
-    //     console.log("Rendering first");
-    //     updateDashboard();
-    // }, [auth0Id]);
-
     useEffect(() => {
         if (!isAuthenticated) {
             loginWithRedirect();
@@ -46,7 +40,7 @@ export default function Dashboard() {
         setQualityChecksDone(dashboardData.numberOfQualityChecks);
     }
     return (
-        <main className="h-full overflow-y-auto">
+        <main className="h-screen overflow-y-auto">
             <Modal
                 updateDashboard={updateDashboard}
                 isModalOpen={isModalOpen}
@@ -189,20 +183,21 @@ export default function Dashboard() {
                     </div>
                     <div
                         className="
-            grid
-            px-4
-            py-3
-            text-xs
-            font-semibold
-            tracking-wide
-            text-gray-500
-            uppercase
-            border-t
-            dark:border-gray-700
-            bg-gray-50
-            sm:grid-cols-9
-            dark:text-gray-400 dark:bg-gray-800
-          "
+                        
+                            grid
+                            px-4
+                            py-3
+                            text-xs
+                            font-semibold
+                            tracking-wide
+                            text-gray-500
+                            uppercase
+                            border-t
+                            dark:border-gray-700
+                            bg-gray-50
+                            sm:grid-cols-9
+                            dark:text-gray-400 dark:bg-gray-800
+                        "
                     ></div>
                 </div>
             </div>
