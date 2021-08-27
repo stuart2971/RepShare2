@@ -8,7 +8,7 @@ import {
 } from "@szhsin/react-menu";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { getHaulsData } from "../utils/DashboardUtils";
 import {
     addListingToHaul,
@@ -22,6 +22,7 @@ import Stars from "./Stars";
 import DeleteModal from "./DeleteModal";
 
 export default function ItemPage() {
+    const history = useHistory();
     const { listingId } = useParams();
     const { user } = useAuth0();
 
@@ -107,11 +108,14 @@ export default function ItemPage() {
         setAverageRating(listing.averageRating);
         setFlags(listing.flags);
     }
+
     async function makeFlagRequest() {
         try {
             const flagStatus = await flagListing(listingId, user.sub);
-            console.log(flagStatus);
             updateListing();
+            if (flagStatus.deleted) {
+                history.goBack();
+            }
         } catch (err) {
             console.log(err);
         }
