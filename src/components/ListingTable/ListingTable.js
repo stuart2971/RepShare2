@@ -32,9 +32,10 @@ export default function ListingTable({ listingsData, getIdOnClick }) {
                                     dark:divide-gray-700 dark:bg-gray-800
                                 "
                     >
-                        {listingsData.map((listing) => {
+                        {listingsData.map((listing, i) => {
                             return (
                                 <Listing
+                                    key={i}
                                     _id={listing._id}
                                     imageUrl={listing.imageURL[0]}
                                     name={listing.name}

@@ -3,20 +3,21 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ListingSection from "../ListingTable/ListingSection";
-import { getMyListings, deleteListing } from "../utils/ListingUtils";
+import { getMyListings } from "../utils/ListingUtils";
 
 export default function MyListings() {
-    const { loginWithRedirect, isAuthenticated } = useAuth0();
+    const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
     const { auth0Id } = useParams();
     const [myListings, setMyListings] = useState([]);
 
     useEffect(async () => {
-        if (!isAuthenticated) {
+        console.log(isAuthenticated);
+        if (!isLoading && !isAuthenticated) {
             loginWithRedirect();
             return;
         }
         fetchMyListings();
-    }, []);
+    }, [isLoading, isAuthenticated]);
 
     async function fetchMyListings() {
         const myListings = await getMyListings(auth0Id);

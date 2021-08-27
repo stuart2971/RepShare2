@@ -1,6 +1,4 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory } from "react-router-dom";
-import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function Listing({
     name,
@@ -13,7 +11,6 @@ export default function Listing({
     createdBy,
     getIdOnClick,
 }) {
-    const { user } = useAuth0();
     const history = useHistory();
     function redirectToItemPage() {
         history.push(`/listing/${_id}`);

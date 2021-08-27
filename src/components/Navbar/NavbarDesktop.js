@@ -1,17 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getAuth0Id } from "../utils/GeneralUtils";
-import { getUser } from "../utils/UserUtils";
 
 export default function NavbarDesktop() {
     const { loginWithRedirect, isAuthenticated, user } = useAuth0();
 
-    useEffect(async () => {
-        if (!isAuthenticated) return;
-        const fetchedUser = await getUser(getAuth0Id(user), user.name);
-        console.log(fetchedUser);
-    }, [isAuthenticated]);
     return (
         <>
             <aside
@@ -133,7 +126,7 @@ export default function NavbarDesktop() {
                                 >
                                     <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                                 </svg>
-                                <Link to={`/browse`}>
+                                <Link to={`/`}>
                                     <span className="ml-4">Browse</span>
                                 </Link>
                             </a>

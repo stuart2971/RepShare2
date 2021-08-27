@@ -14,7 +14,7 @@ import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function Dashboard() {
     let { auth0Id } = useParams();
-    const { user, isAuthenticated, loginWithRedirect } = useAuth0();
+    const { user, isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
     const [haulsData, setHaulsData] = useState([]);
     const [numberOfHauls, setNumberOfHauls] = useState(0);
     const [totalHaulItems, setTotalHaulItems] = useState(0);
@@ -24,12 +24,12 @@ export default function Dashboard() {
     const [isModalOpen, setIsModalOpen] = useState("");
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!isLoading && !isAuthenticated) {
             loginWithRedirect();
             return;
         }
         updateDashboard();
-    }, []);
+    }, [isLoading, isAuthenticated]);
     async function updateDashboard() {
         const dashboardData = await getDashboardData(auth0Id);
         const hauls = await getHaulsData(auth0Id);

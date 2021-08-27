@@ -10,7 +10,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getHaulsData } from "../utils/DashboardUtils";
-import { addListingToHaul, getListing } from "../utils/ListingUtils";
+import {
+    addListingToHaul,
+    getListing,
+    flagListing,
+} from "../utils/ListingUtils";
 import { getAuth0Id } from "../utils/GeneralUtils";
 import EditModal from "./EditModal";
 import QualityChecksSection from "./QualityCheck/QualityChecksSection";
@@ -29,6 +33,8 @@ export default function ItemPage() {
     const [link, setLink] = useState("");
     const [qualityChecks, setQualityChecks] = useState([]);
     const [createdBy, setCreatedBy] = useState("");
+    const [averageRating, setAverageRating] = useState(0);
+    const [flags, setFlags] = useState(0);
 
     const [hauls, setHauls] = useState([]);
     const [imageIndex, setImageIndex] = useState(0);
@@ -59,6 +65,21 @@ export default function ItemPage() {
             </button>
         </MenuButton>
     );
+    const threeDots = (
+        <MenuButton>
+            <div className=" w-10 h-10  p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    className="w-6 h-6 bi bi-three-dots-vertical"
+                    viewBox="0 0 16 16"
+                >
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                </svg>
+            </div>
+        </MenuButton>
+    );
+
     async function addToHaul(haulId) {
         const listing = await addListingToHaul(
             getAuth0Id(user),
@@ -75,7 +96,6 @@ export default function ItemPage() {
 
     async function updateListing() {
         const listing = await getListing(listingId);
-        console.log(listing);
         setName(listing.name);
         setImages(listing.imageURL);
         setPrice(listing.price);
@@ -84,8 +104,18 @@ export default function ItemPage() {
         setLink(listing.link);
         setQualityChecks(listing.qualityChecks);
         setCreatedBy(listing.createdBy);
+        setAverageRating(listing.averageRating);
+        setFlags(listing.flags);
     }
-
+    async function makeFlagRequest() {
+        try {
+            const flagStatus = await flagListing(listingId, user.sub);
+            console.log(flagStatus);
+            updateListing();
+        } catch (err) {
+            console.log(err);
+        }
+    }
     return (
         <section className="text-gray-600 body-font h-100 pb-24">
             <EditModal
@@ -136,9 +166,15 @@ export default function ItemPage() {
                         </a>
                         <div className="flex mb-4">
                             <span className="flex items-center">
-                                <Stars count={4} size={4} />
+                                <Stars
+                                    count={Math.round(averageRating)}
+                                    size={4}
+                                />
                                 <span className="text-gray-600 ml-3">
-                                    {qualityChecks.length} Reviews
+                                    {averageRating
+                                        ? averageRating.toFixed(1)
+                                        : 0}{" "}
+                                    stars
                                 </span>
                             </span>
                             <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s">
@@ -195,9 +231,10 @@ export default function ItemPage() {
                                 >
                                     <MenuHeader>Your Hauls</MenuHeader>
                                     <MenuDivider />
-                                    {hauls.map((haul) => {
+                                    {hauls.map((haul, i) => {
                                         return (
                                             <MenuItem
+                                                key={i}
                                                 onClick={() =>
                                                     addToHaul(haul._id)
                                                 }
@@ -207,42 +244,59 @@ export default function ItemPage() {
                                         );
                                     })}
                                 </Menu>
-                                {createdBy === getAuth0Id(user) ? (
-                                    <div>
-                                        <button
+
+                                <Menu direction="bottom" menuButton={threeDots}>
+                                    {createdBy === getAuth0Id(user) ? (
+                                        <MenuItem
                                             onClick={() =>
                                                 setIsEditModalOpen(true)
                                             }
-                                            className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor"
-                                                className="bi bi-pencil-fill w-4 h-4"
+                                                className="mr-2 w-4 h-4"
                                                 viewBox="0 0 16 16"
                                             >
                                                 <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
                                             </svg>
-                                        </button>
-                                        <button
+                                            Edit Listing
+                                        </MenuItem>
+                                    ) : (
+                                        <MenuItem></MenuItem>
+                                    )}
+
+                                    <MenuItem onClick={makeFlagRequest}>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor"
+                                            className="mr-2 w-4 h-4"
+                                            viewBox="0 0 16 16"
+                                        >
+                                            <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                        </svg>
+                                        Flag Listing ({flags})
+                                    </MenuItem>
+                                    {createdBy === getAuth0Id(user) ? (
+                                        <MenuItem
                                             onClick={() =>
                                                 setIsDeleteModalOpen(true)
                                             }
-                                            className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor"
-                                                className="bi bi-trash-fill w-4 h-4"
+                                                className="mr-2 w-4 h-4"
                                                 viewBox="0 0 16 16"
                                             >
                                                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
                                             </svg>
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <></>
-                                )}
+                                            Delete Listing
+                                        </MenuItem>
+                                    ) : (
+                                        <MenuItem></MenuItem>
+                                    )}
+                                </Menu>
                             </div>
                         </div>
                     </div>

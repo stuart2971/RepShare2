@@ -144,9 +144,9 @@ export default function EditListingModal({
                                     <option disabled selected>
                                         Tag
                                     </option>
-                                    {TagsJSON.tags.map((tagName) => {
+                                    {TagsJSON.tags.map((tagName, i) => {
                                         return (
-                                            <option value={tagName}>
+                                            <option key={i} value={tagName}>
                                                 {tagName}
                                             </option>
                                         );

@@ -19,11 +19,11 @@ export default function QualityChecksSection({
             />
             <div className="flex justify-between ">
                 <h1 className="text-gray-900 text-2xl title-font font-medium mb-1">
-                    Quality Checks
+                    Quality Checks ({qualityChecks.length} Reviews)
                 </h1>
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="flex items-center w-auto px-4 py-2 hover:bg-purple-600 hover:text-white rounded border text-purple-600 border-purple-600"
+                    className="flex items-center w-auto px-4 py-2 hover:bg-purple-600 hover:text-white rounded border text-purple-600 border-purple-600 h-12"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -35,17 +35,21 @@ export default function QualityChecksSection({
                     >
                         <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
                     </svg>
-                    <span className="hidden md:block">Add comment</span>
+                    <span className="hidden md:block">Rate item</span>
                 </button>
             </div>
             {qualityChecks.length > 0 ? (
-                qualityChecks.map((qualityCheck) => {
+                qualityChecks.map((qualityCheck, i) => {
                     return (
                         <QualityCheck
+                            key={i}
                             name={qualityCheck.name}
                             auth0Id={qualityCheck.auth0Id}
                             comment={qualityCheck.comment}
                             rating={qualityCheck.rating}
+                            _id={qualityCheck._id}
+                            listingId={listingId}
+                            updateListing={updateListing}
                         />
                     );
                 })

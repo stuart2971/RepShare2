@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, BrowserRouter, Switch } from "react-router-dom";
 import Browse from "./components/Browse/Browse";
 import CreateListing from "./components/CreateListing/CreateListing";
@@ -10,14 +10,23 @@ import NavbarMobile from "./components/Navbar/NavbarMobile";
 import HaulPage from "./components/Dashboard/HaulPage";
 import ListingPage from "./components/ListingPage/ListingPage";
 
+import { getUser } from "./components/utils/UserUtils";
+import { useAuth0 } from "@auth0/auth0-react";
+import { getAuth0Id } from "./components/utils/GeneralUtils";
+
 function App() {
+    const { isAuthenticated, user } = useAuth0();
     const [sideMenu, toggleSideMenu] = useState(false);
+
+    useEffect(async () => {
+        if (!isAuthenticated) return;
+        const fetchedUser = await getUser(getAuth0Id(user), user.name);
+    }, [isAuthenticated]);
 
     return (
         <BrowserRouter>
             <div class="flex bg-gray-50 dark:bg-gray-900">
-                <NavbarDesktop />
-                {sideMenu ? <NavbarMobile /> : <></>}
+                {sideMenu ? <NavbarMobile /> : <NavbarDesktop />}
 
                 <div class="flex flex-col flex-1 w-full">
                     <Header
@@ -34,7 +43,7 @@ function App() {
                             path="/createListing"
                             component={CreateListing}
                         />
-                        <Route path="/browse" component={Browse} />
+                        <Route exact path="/" component={Browse} />
                         <Route
                             path="/:auth0Id/myListings"
                             component={MyListings}
