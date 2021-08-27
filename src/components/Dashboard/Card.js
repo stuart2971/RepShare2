@@ -1,9 +1,4 @@
-import { merge } from "../utils/GeneralUtils";
-
 export default function Card({ title, value, SVGPath, color }) {
-    const textColor = `text-${color}-500`;
-    const backgroundColor = `bg-${color}-100`;
-
     return (
         <div
             className="
@@ -27,13 +22,13 @@ export default function Card({ title, value, SVGPath, color }) {
             "
             >
                 <div
-                    className={merge(
-                        "p-3",
-                        "mr-4",
-                        textColor,
-                        backgroundColor,
-                        "rounded-full"
-                    )}
+                    className={`
+                        p-3
+                        mr-4
+                        text-${color}-500
+                        bg-${color}-100
+                        rounded-full
+                    `}
                 >
                     <svg
                         className="w-5 h-5"
