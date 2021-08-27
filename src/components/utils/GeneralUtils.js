@@ -3,3 +3,7 @@ export function getAuth0Id(user) {
     if (user) return user.sub;
     else return null;
 }
+
+export function merge(...args) {
+    return args.join(" ");
+}
