@@ -92,4 +92,7 @@ export default App;
  * h-4
  * w-6
  * h-6
+ * bg-red-600
+ * bg-red-200
+ * hover:bg-red-700
  */

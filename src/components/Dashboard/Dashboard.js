@@ -30,6 +30,7 @@ export default function Dashboard() {
         }
         updateDashboard();
     }, [isLoading, isAuthenticated]);
+
     async function updateDashboard() {
         const dashboardData = await getDashboardData(auth0Id);
         const hauls = await getHaulsData(auth0Id);
