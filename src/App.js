@@ -64,3 +64,32 @@ function App() {
 }
 
 export default App;
+
+/**
+ * PurgeCSS:
+ * text-blue-500
+ * bg-blue-100
+ * text-green-500
+ * text-yellow-500
+ * bg-yellow-100
+ * text-pink-500
+ * bg-pink-100
+ * text-red-600
+ * bg-purple-400
+ * bg-purple-600
+ * hover:bg-purple-700
+ * opacity-25
+ * hover:opacity-100
+ * transition
+ * text-purple-600
+ * text-gray-400
+ * font-semibold
+ * text-green-700
+ * text-gray-700
+ * bg-green-100
+ * bg-gray-100
+ * w-4
+ * h-4
+ * w-6
+ * h-6
+ */
