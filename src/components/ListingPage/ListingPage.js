@@ -24,7 +24,7 @@ import DeleteModal from "./DeleteModal";
 export default function ItemPage() {
     const history = useHistory();
     const { listingId } = useParams();
-    const { user } = useAuth0();
+    const { user, isAuthenticated, isLoading } = useAuth0();
 
     const [name, setName] = useState("");
     const [images, setImages] = useState([]);
@@ -228,79 +228,89 @@ export default function ItemPage() {
                                 ¥{price}
                             </span>
                             <div className="flex">
-                                <Menu
-                                    direction="left"
-                                    arrow="arrow"
-                                    menuButton={menuButton}
-                                >
-                                    <MenuHeader>Your Hauls</MenuHeader>
-                                    <MenuDivider />
-                                    {hauls.map((haul, i) => {
-                                        return (
+                                {isAuthenticated ? (
+                                    <Menu
+                                        direction="left"
+                                        arrow="arrow"
+                                        menuButton={menuButton}
+                                    >
+                                        <MenuHeader>Your Hauls</MenuHeader>
+                                        <MenuDivider />
+                                        {hauls.map((haul, i) => {
+                                            return (
+                                                <MenuItem
+                                                    key={i}
+                                                    onClick={() =>
+                                                        addToHaul(haul._id)
+                                                    }
+                                                >
+                                                    {haul.name}
+                                                </MenuItem>
+                                            );
+                                        })}
+                                    </Menu>
+                                ) : (
+                                    <></>
+                                )}
+                                {isAuthenticated ? (
+                                    <Menu
+                                        direction="bottom"
+                                        menuButton={threeDots}
+                                    >
+                                        {createdBy === getAuth0Id(user) ? (
                                             <MenuItem
-                                                key={i}
                                                 onClick={() =>
-                                                    addToHaul(haul._id)
+                                                    setIsEditModalOpen(true)
                                                 }
                                             >
-                                                {haul.name}
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    className="mr-2 w-4 h-4"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                                </svg>
+                                                Edit Listing
                                             </MenuItem>
-                                        );
-                                    })}
-                                </Menu>
+                                        ) : (
+                                            <MenuItem></MenuItem>
+                                        )}
 
-                                <Menu direction="bottom" menuButton={threeDots}>
-                                    {createdBy === getAuth0Id(user) ? (
-                                        <MenuItem
-                                            onClick={() =>
-                                                setIsEditModalOpen(true)
-                                            }
-                                        >
+                                        <MenuItem onClick={makeFlagRequest}>
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 fill="currentColor"
                                                 className="mr-2 w-4 h-4"
                                                 viewBox="0 0 16 16"
                                             >
-                                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                                <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
                                             </svg>
-                                            Edit Listing
+                                            Flag Listing ({flags})
                                         </MenuItem>
-                                    ) : (
-                                        <MenuItem></MenuItem>
-                                    )}
-
-                                    <MenuItem onClick={makeFlagRequest}>
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor"
-                                            className="mr-2 w-4 h-4"
-                                            viewBox="0 0 16 16"
-                                        >
-                                            <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
-                                        </svg>
-                                        Flag Listing ({flags})
-                                    </MenuItem>
-                                    {createdBy === getAuth0Id(user) ? (
-                                        <MenuItem
-                                            onClick={() =>
-                                                setIsDeleteModalOpen(true)
-                                            }
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor"
-                                                className="mr-2 w-4 h-4"
-                                                viewBox="0 0 16 16"
+                                        {createdBy === getAuth0Id(user) ? (
+                                            <MenuItem
+                                                onClick={() =>
+                                                    setIsDeleteModalOpen(true)
+                                                }
                                             >
-                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
-                                            </svg>
-                                            Delete Listing
-                                        </MenuItem>
-                                    ) : (
-                                        <MenuItem></MenuItem>
-                                    )}
-                                </Menu>
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor"
+                                                    className="mr-2 w-4 h-4"
+                                                    viewBox="0 0 16 16"
+                                                >
+                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+                                                </svg>
+                                                Delete Listing
+                                            </MenuItem>
+                                        ) : (
+                                            <MenuItem></MenuItem>
+                                        )}
+                                    </Menu>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </div>
                     </div>

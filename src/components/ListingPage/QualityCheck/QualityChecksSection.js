@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import AddQCModal from "./AddQCModal";
 import QualityCheck from "./QualityCheck";
@@ -7,6 +8,7 @@ export default function QualityChecksSection({
     listingId,
     updateListing,
 }) {
+    const { isAuthenticated } = useAuth0();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -19,24 +21,28 @@ export default function QualityChecksSection({
             />
             <div className="flex justify-between ">
                 <h1 className="text-gray-900 text-2xl title-font font-medium mb-1">
-                    Quality Checks ({qualityChecks.length} Reviews)
+                    Quality Checks
                 </h1>
-                <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="flex items-center w-auto px-4 py-2 hover:bg-purple-600 hover:text-white rounded border text-purple-600 border-purple-600 h-12"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        fill="currentColor"
-                        className="mr-2"
-                        viewBox="0 0 16 16"
+                {isAuthenticated ? (
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="flex items-center w-auto px-4 py-2 hover:bg-purple-600 hover:text-white rounded border text-purple-600 border-purple-600 h-12"
                     >
-                        <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
-                    </svg>
-                    <span className="hidden md:block">Rate item</span>
-                </button>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="mr-2"
+                            viewBox="0 0 16 16"
+                        >
+                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z" />
+                        </svg>
+                        <span className="hidden md:block">Rate item</span>
+                    </button>
+                ) : (
+                    <></>
+                )}
             </div>
             {qualityChecks.length > 0 ? (
                 qualityChecks.map((qualityCheck, i) => {
