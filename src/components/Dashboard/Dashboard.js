@@ -16,10 +16,10 @@ export default function Dashboard() {
     let { auth0Id } = useParams();
     const { user, isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
     const [haulsData, setHaulsData] = useState([]);
-    const [numberOfHauls, setNumberOfHauls] = useState(0);
-    const [totalHaulItems, setTotalHaulItems] = useState(0);
-    const [listingsContributed, setListingsContributed] = useState(0);
-    const [qualityChecksDone, setQualityChecksDone] = useState(0);
+    const [numberOfHauls, setNumberOfHauls] = useState(null);
+    const [totalHaulItems, setTotalHaulItems] = useState(null);
+    const [listingsContributed, setListingsContributed] = useState(null);
+    const [qualityChecksDone, setQualityChecksDone] = useState(null);
 
     const [isModalOpen, setIsModalOpen] = useState("");
 
@@ -149,7 +149,6 @@ export default function Dashboard() {
                                     <th className="px-4 py-3">Item</th>
                                     <th className="px-4 py-3">Total</th>
                                     <th className="px-4 py-3">Status</th>
-
                                     <th className="px-4 py-3">Last Updated</th>
                                 </tr>
                             </thead>

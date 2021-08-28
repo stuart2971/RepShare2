@@ -197,7 +197,7 @@ export default function CreateListing() {
                                     "
                                 maxlength="150"
                                 onChange={(e) => setItemName(e.target.value)}
-                                placeholder="Brand, Item Type"
+                                placeholder="Enter Item Name Here"
                             />
                         </label>
                         <label className="block text-sm mt-2">

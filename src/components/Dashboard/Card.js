@@ -59,7 +59,7 @@ export default function Card({ title, value, SVGPath, color }) {
                         dark:text-gray-200
                     "
                 >
-                    {value}
+                    {value !== null ? value : "Loading..."}
                 </p>
             </div>
         </div>
