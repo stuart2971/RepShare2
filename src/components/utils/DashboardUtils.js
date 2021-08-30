@@ -57,6 +57,18 @@ export async function getHaul(auth0Id, haulId) {
     }
 }
 
+export async function changeHaulName(auth0Id, haulId, newHaulName) {
+    try {
+        let response = await fetch(
+            `${serverDomain}/haul/${auth0Id}/changeHaulName/${haulId}/${newHaulName}`
+        );
+
+        return response.json();
+    } catch (err) {
+        console.log("ERROR GETTING HAUL ", err);
+    }
+}
+
 export function calculateTotalHaulItems(haulsData) {
     let total = 0;
     for (let i = 0; i < haulsData.length; i++) {

@@ -1,6 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-import { createHaul, removeHaul } from "../utils/DashboardUtils";
+import {
+    changeHaulName,
+    createHaul,
+    removeHaul,
+} from "../utils/DashboardUtils";
 import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function Modal({
@@ -27,6 +31,23 @@ export default function Modal({
                 <div class="mt-4 mb-6">
                     <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
                         Create a Haul
+                    </p>
+                    <p class="text-sm text-gray-700 dark:text-gray-400">
+                        <input
+                            onChange={(e) => setHaulName(e.target.value)}
+                            autoFocus
+                            class="focus:border-purple-400 block w-full mt-1 text-lg dark:border-gray-600 dark:bg-gray-700  focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                            placeholder="Please enter a haul name here"
+                        />
+                    </p>
+                </div>
+            );
+
+        if (modalCommand === "edit")
+            return (
+                <div class="mt-4 mb-6">
+                    <p class="mb-2 text-lg font-semibold text-gray-700 dark:text-gray-300">
+                        Change Haul Name
                     </p>
                     <p class="text-sm text-gray-700 dark:text-gray-400">
                         <input
@@ -87,6 +108,19 @@ export default function Modal({
                 </button>
             );
         }
+        if (modalCommand === "edit") {
+            return (
+                <button
+                    disabled={haulName === ""}
+                    onClick={confirmModal}
+                    class={`w-full px-5 py-3 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-${
+                        haulName ? "600 hover:bg-purple-700" : "200"
+                    } border border-transparent rounded-lg sm:w-auto sm:px-4 sm:py-2 active:bg-purple-600 focus:outline-none focus:shadow-outline-purple`}
+                >
+                    Change Name
+                </button>
+            );
+        }
     }
     async function confirmModal() {
         if (modalCommand === "add") {
@@ -96,6 +130,19 @@ export default function Modal({
                 closeModal();
             }
         }
+        if (modalCommand === "edit") {
+            const editedStatus = await changeHaulName(
+                getAuth0Id(user),
+                modalOptions,
+                haulName
+            );
+            console.log(editedStatus);
+            if (editedStatus.updated) {
+                updateDashboard();
+                closeModal();
+            }
+        }
+
         if (modalCommand === "delete") {
             if (deleteConfirmation === "DELETE") {
                 const deletedStatus = await removeHaul(

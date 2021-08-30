@@ -57,6 +57,7 @@ export default function HaulListing({
                               focus:outline-none focus:shadow-outline-gray
                             "
                             aria-label="Edit"
+                            onClick={() => setIsModalOpen("edit/" + _id)}
                         >
                             <svg
                                 class="w-5 h-5"
