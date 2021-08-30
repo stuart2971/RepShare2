@@ -123,10 +123,10 @@ export async function removeListingFromHaul(auth0Id, haulId, listingId) {
     }
 }
 
-export async function deleteListing(listingId) {
+export async function deleteListing(listingId, auth0Id) {
     try {
         let response = await fetch(
-            `${serverDomain}/listing/deleteListing/${listingId}`
+            `${serverDomain}/listing/deleteListing/${listingId}/${auth0Id}`
         );
         return response.json();
     } catch (err) {

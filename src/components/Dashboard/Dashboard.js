@@ -147,8 +147,6 @@ export default function Dashboard() {
                 "
                                 >
                                     <th className="px-4 py-3">Item</th>
-                                    <th className="px-4 py-3">Total</th>
-                                    <th className="px-4 py-3">Status</th>
                                     <th className="px-4 py-3">Last Updated</th>
                                 </tr>
                             </thead>

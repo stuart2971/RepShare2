@@ -1,17 +1,21 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { deleteListing } from "../utils/ListingUtils";
+import { getAuth0Id } from "../utils/GeneralUtils";
 
 export default function DeleteModal({
     isDeleteModalOpen,
     setIsDeleteModalOpen,
     listingId,
 }) {
+    const { user } = useAuth0();
     const [modalConfirmation, setModalConfirmation] = useState("");
     const history = useHistory();
+
     async function deleteListingFromDB() {
         if (modalConfirmation === "DELETE" && listingId) {
-            const status = await deleteListing(listingId);
+            const status = await deleteListing(listingId, getAuth0Id(user));
             setIsDeleteModalOpen(false);
             history.goBack();
         }

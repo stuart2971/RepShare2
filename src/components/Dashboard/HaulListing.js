@@ -34,23 +34,7 @@ export default function HaulListing({
                     </div>
                 </div>
             </td>
-            <td className="px-4 py-3 text-sm">$ 863.45</td>
-            <td className="px-4 py-3 text-xs">
-                <span
-                    className="
-                      px-2
-                      py-1
-                      font-semibold
-                      leading-tight
-                      text-green-700
-                      bg-green-100
-                      rounded-full
-                      dark:bg-green-700 dark:text-green-100
-                    "
-                >
-                    Approved
-                </span>
-            </td>
+
             <td className="px-4 py-3 text-sm">
                 {lastUpdated ? lastUpdated.substring(0, 10) : ""}
             </td>
