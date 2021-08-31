@@ -203,3 +203,15 @@ export async function flagListing(listingId, auth0Id) {
         console.log("ERROR FLAGGING LISTING ", err);
     }
 }
+
+export async function findListings(search) {
+    try {
+        console.log(search);
+        let response = await fetch(
+            `${serverDomain}/listing/findListings/${search}`
+        );
+        return response.json();
+    } catch (err) {
+        console.log("ERROR FLAGGING LISTING ", err);
+    }
+}

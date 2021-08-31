@@ -1,8 +1,25 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Menu, MenuItem, MenuButton, SubMenu } from "@szhsin/react-menu";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { findListings } from "./utils/ListingUtils";
 
 export default function Header({ toggleSideMenu, sideMenu }) {
     const { user, isAuthenticated, logout, loginWithRedirect } = useAuth0();
+    const history = useHistory();
+
+    const [search, setSearch] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+
+    useEffect(async () => {
+        const results = await findListings(search);
+        setSearchResults(results);
+    }, [search]);
+
+    function redirectToItemPage(id) {
+        history.push("/listing/" + id);
+        setSearch("");
+    }
 
     const profileImage = (
         <MenuButton>
@@ -70,12 +87,13 @@ export default function Header({ toggleSideMenu, sideMenu }) {
                 <div className="flex justify-center flex-1 lg:mr-32">
                     <div
                         className="
-                  relative
-                  w-full
-                  max-w-xl
-                  mr-6
-                  focus-within:text-purple-500
-                "
+                            relative
+                            w-full
+                            max-w-xl
+                            mr-6
+                            focus-within:text-purple-500
+                            
+                            "
                     >
                         <div className="absolute inset-y-0 flex items-center pl-2">
                             <svg
@@ -102,11 +120,6 @@ export default function Header({ toggleSideMenu, sideMenu }) {
                                 bg-gray-100
                                 border-0
                                 rounded-md
-                                dark:placeholder-gray-500
-                                dark:focus:shadow-outline-gray
-                                dark:focus:placeholder-gray-600
-                                dark:bg-gray-700
-                                dark:text-gray-200
                                 focus:placeholder-gray-500
                                 focus:bg-white
                                 focus:border-purple-300
@@ -117,9 +130,31 @@ export default function Header({ toggleSideMenu, sideMenu }) {
                             type="text"
                             placeholder="Search for items"
                             aria-label="Search"
+                            onChange={(e) => setSearch(e.target.value)}
+                            value={search}
                         />
+                        {search ? (
+                            <div className="min-h-0 w-full absolute rounded bg-white">
+                                {searchResults.map((result, i) => {
+                                    return (
+                                        <div
+                                            key={i}
+                                            className="w-full h-10 text-black px-4 py-2 hover:text-purple-600 cursor-pointer"
+                                            onClick={() =>
+                                                redirectToItemPage(result._id)
+                                            }
+                                        >
+                                            <h1>{result.name}</h1>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
                     </div>
                 </div>
+
                 <ul className="flex items-center flex-shrink-0 space-x-6">
                     {/* Theme toggler */}
                     <li className="flex">
